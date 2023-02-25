@@ -22,6 +22,14 @@ const App = () => {
   const [posts, setPosts] = useState(dummyData);
   const [search, setSearch] = useState("");
   
+  const getFilteredPosts = () => {
+    const termNormalized = search.trim().toLowerCase();
+    if (!termNormalized) return posts;
+    return posts.filter(post => {
+      return post.username.trim().toLowerCase().includes(termNormalized);
+    })
+  }
+  
   const likePost = postId => {
     /*
       This function serves the purpose of increasing the number of likes by one, of the post with a given id.
@@ -48,9 +56,8 @@ const App = () => {
     <div className='App'>
       {/* Add SearchBar and Posts here to render them */}
       {/* Check the implementation of each component, to see what props they require, if any! */}
-      <SearchBar />
-      <Posts likePost={likePost} posts={posts}/>
-
+      <SearchBar search={search} setSearch={setSearch} posts={posts} />
+      <Posts likePost={likePost} posts={getFilteredPosts()} />
     </div>
   );
 };
